@@ -1,5 +1,5 @@
 {
-  "name": "bottega-ticket-notification",
+  "name": "bottega-ticket-notifications",
   "version": "1.0.0",
   "description": "Plays a notification sound when a new ticket is recieved",
   "main": "main.js",
