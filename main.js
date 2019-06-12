@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const notifier = require('node-notifier');
+const os = require('os');
 
 let cacheTickets = new Array();
 setInterval(() => {
@@ -17,13 +18,7 @@ setInterval(() => {
                 
                 if (cacheTickets.indexOf(ticket) == -1) {
                     cacheTickets.push(ticket);
-                    //Linux sound work around.
-                    console.time("audioPlay");
-                    const { spawn } = require('child_process');
-                    const audio = spawn('play', ['defaultBeep.ogg']);
-                    console.timeEnd("audioPlay");
-                    //Linux sound work around end.
-
+                    linuxSound();
                     notifier.notify({
                         title: 'New Devcamp Ticket!',
                         message: `A ticket from ${ticket.full_name} Title: ${ticket.title}`,
@@ -33,3 +28,10 @@ setInterval(() => {
             });
         })
 }, 5000);
+
+function linuxSound() {
+    if(os.platform().toLowerCase() == "linux"){
+        const { spawn } = require('child_process');
+        const audio = spawn('play', ['defaultBeep.ogg']);
+    }
+}
