@@ -44,8 +44,8 @@ setInterval(() => {
                 delete ticket.comments;
                 delete ticket.ticket_assignment;
 
-                if (cacheTickets.indexOf(ticket) == -1) {
-                    cacheTickets.push(ticket);
+                if (CacheTickets.indexOf(ticket) == -1) {
+                    CacheTickets.push(ticket);
                     playSound();
                     Notifier.notify({
                         title: 'New Devcamp Ticket!',
