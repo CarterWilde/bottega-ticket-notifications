@@ -38,23 +38,31 @@ setInterval(() => {
         })
         .then(data => { return data.tickets })
         .then(tickets => {
-            tickets.forEach(ticket => {
+            for (let i = 0; i < tickets.length; i++) {
+                const ticket = tickets[i];
+                const CacheTicket = CacheTickets[i]
                 //Cleaning up the object
                 delete ticket.assigned_users;
                 delete ticket.comments;
                 delete ticket.ticket_assignment;
-
-                if (CacheTickets.indexOf(ticket) == -1) {
+                if (CacheTicket == undefined) {
                     CacheTickets.push(ticket);
-                    playSound();
-                    Notifier.notify({
-                        title: 'New Devcamp Ticket!',
-                        message: `A ticket from ${ticket.full_name} Title: ${ticket.title}`
-                    });
+                    SendNotifications(ticket);
+                    return;
                 }
-            });
+                ticket.id !== CacheTicket.id && ticket.user_id !== CacheTicket.user_id && ticket.title !== CacheTicket.title
+                    ? SendNotifications(ticket) : CacheTickets.push()
+            }
         })
-}, 5000);
+}, 500);
+
+function SendNotifications(ticket) {
+    playSound();
+    Notifier.notify({
+        title: 'New Devcamp Ticket!',
+        message: `From: ${ticket.full_name}\n\rEmail: ${ticket.user_email}\n\rTitle: ${ticket.title}\n\rContent: ${ticket.content}`
+    });
+}
 
 function playSound() {
     const { spawn } = require('child_process');
