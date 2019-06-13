@@ -1,11 +1,12 @@
 const fetch = require('node-fetch');
 const Notifier = require('node-notifier');
+
 let SoundPath = './defaultBeep.ogg';
 if (process.argv[2]) {
     SoundPath = process.argv[2];
 }
 let CacheClearTimer = 600000;
-if(process.argv[4]){
+if (process.argv[4]) {
     CacheClearTimer = process.argv[4]
 }
 let AudioPlayerCmd;
@@ -42,10 +43,9 @@ setInterval(() => {
         })
         .then(data => { return data.tickets })
         .then(tickets => {
-            if(tickets.length <= 0){
+            if (tickets.length <= 0) {
                 ClearCache();
             }
-            const fakeTickets = JSON.parse(fs.readFileSync('./fakeTickets.json'));
             for (let i = 0; i < tickets.length; i++) {
                 const ticket = tickets[i];
                 const CacheTicket = CacheTickets[i]
@@ -65,7 +65,7 @@ setInterval(() => {
 }, 500);
 
 function ClearCache() {
-    while(CacheTickets.length > 0){
+    while (CacheTickets.length > 0) {
         CacheTickets.pop();
     }
 }
