@@ -9,6 +9,7 @@
   "author": "Carter Wilde",
   "license": "ISC",
   "dependencies": {
+    "commander": "^2.20.0",
     "node-fetch": "^2.6.0",
     "node-notifier": "^5.4.0"
   }

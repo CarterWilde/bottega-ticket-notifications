@@ -1,39 +1,16 @@
 const fetch = require('node-fetch');
 const Notifier = require('node-notifier');
-
-let SoundPath = './defaultBeep.ogg';
-if (process.argv[2]) {
-    SoundPath = process.argv[2];
-}
-let CacheClearTimer = 600000;
-if (process.argv[4]) {
-    CacheClearTimer = process.argv[4]
-}
-let AudioPlayerCmd;
-if (process.argv[3]) {
-    AudioPlayerCmd = process.argv[3]
-} else {
-    switch (process.platform) {
-        case 'darwin':
-            AudioPlayerCmd = 'afplay';
-            break;
-        case 'freebsd':
-            AudioPlayerCmd = 'printf';
-            break;
-        case 'linux':
-            AudioPlayerCmd = 'printf'
-            break;
-        case 'openbsd':
-            AudioPlayerCmd = 'printf'
-            break;
-        case 'sunos':
-            AudioPlayerCmd = 'audioplay'
-            break;
-        case 'win32':
-            AudioPlayerCmd = 'start'
-            break;
-    }
-}
+const Commander = require('commander');
+Commander
+    .version('1.0.0')
+    .usage('[OPTIONS]...')
+    .option('-p, --path <path>', 'Sets the path of what audio clip will be used', './defaultBeep.ogg')
+    .option('-c, --cache <cacheTime>', 'Set the interval(miliseconds) of the cache clear', 600000)
+    .option('-P, --player <playerExe>', 'Sets the player that will play the sound', 'play')
+    .parse(process.argv);
+let AudioPlayerCmd = Commander.player;
+let SoundPath = Commander.path;
+let CacheClearTimer = Commander.cache;
 
 let CacheTickets = new Array();
 setInterval(() => {
@@ -69,7 +46,7 @@ function ClearCache() {
         CacheTickets.pop();
     }
 }
-setInterval(ClearCache, CacheClearTimer);
+setInterval(ClearCache, parseInt(CacheClearTimer));
 
 function SendNotifications(ticket) {
     playSound();
