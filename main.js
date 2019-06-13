@@ -1,8 +1,12 @@
 const fetch = require('node-fetch');
-const notifier = require('node-notifier');
+const Notifier = require('node-notifier');
 const os = require('os');
+let SoundPath = './defaultBeep.ogg';
+if(process.argv[2]){
+    SoundPath = process.argv[2];
+}
 
-let cacheTickets = new Array();
+let CacheTickets = new Array();
 setInterval(() => {
     fetch("https://ticketapi.bottega.tech/tickets?role=admin")
         .then(response => {
@@ -19,7 +23,7 @@ setInterval(() => {
                 if (cacheTickets.indexOf(ticket) == -1) {
                     cacheTickets.push(ticket);
                     linuxSound();
-                    notifier.notify({
+                    Notifier.notify({
                         title: 'New Devcamp Ticket!',
                         message: `A ticket from ${ticket.full_name} Title: ${ticket.title}`,
                         sound: true
@@ -32,6 +36,6 @@ setInterval(() => {
 function linuxSound() {
     if(os.platform().toLowerCase() == "linux"){
         const { spawn } = require('child_process');
-        const audio = spawn('play', ['defaultBeep.ogg']);
+        const audio = spawn('play', [SoundPath]);
     }
 }
