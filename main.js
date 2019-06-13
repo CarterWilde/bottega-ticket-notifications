@@ -1,9 +1,33 @@
 const fetch = require('node-fetch');
 const Notifier = require('node-notifier');
-const os = require('os');
 let SoundPath = './defaultBeep.ogg';
-if(process.argv[2]){
+if (process.argv[2]) {
     SoundPath = process.argv[2];
+}
+let AudioPlayerCmd;
+if (process.argv[3]) {
+    AudioPlayerCmd = process.argv[3]
+} else {
+    switch (process.platform) {
+        case 'darwin':
+            AudioPlayerCmd = 'afplay';
+            break;
+        case 'freebsd':
+            AudioPlayerCmd = 'printf';
+            break;
+        case 'linux':
+            AudioPlayerCmd = 'printf'
+            break;
+        case 'openbsd':
+            AudioPlayerCmd = 'printf'
+            break;
+        case 'sunos':
+            AudioPlayerCmd = 'audioplay'
+            break;
+        case 'win32':
+            AudioPlayerCmd = 'start'
+            break;
+    }
 }
 
 let CacheTickets = new Array();
@@ -19,23 +43,20 @@ setInterval(() => {
                 delete ticket.assigned_users;
                 delete ticket.comments;
                 delete ticket.ticket_assignment;
-                
+
                 if (cacheTickets.indexOf(ticket) == -1) {
                     cacheTickets.push(ticket);
-                    linuxSound();
+                    playSound();
                     Notifier.notify({
                         title: 'New Devcamp Ticket!',
-                        message: `A ticket from ${ticket.full_name} Title: ${ticket.title}`,
-                        sound: true
+                        message: `A ticket from ${ticket.full_name} Title: ${ticket.title}`
                     });
                 }
             });
         })
 }, 5000);
 
-function linuxSound() {
-    if(os.platform().toLowerCase() == "linux"){
-        const { spawn } = require('child_process');
-        const audio = spawn('play', [SoundPath]);
-    }
+function playSound() {
+    const { spawn } = require('child_process');
+    const audio = spawn(AudioPlayerCmd, [SoundPath]);
 }
