@@ -60,7 +60,8 @@ function SendNotifications(ticket) {
     playSound();
     Notifier.notify({
         title: 'New Devcamp Ticket!',
-        message: `From: ${ticket.full_name}\n\rEmail: ${ticket.user_email}\n\rTitle: ${ticket.title}\n\rContent: ${ticket.content}`
+        message: `From: ${ticket.full_name}\n\rEmail: ${ticket.user_email}\n\rTitle: ${ticket.title}\n\rContent: ${ticket.content}`,
+        sound: true
     });
 }
 
