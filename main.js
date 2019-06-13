@@ -69,7 +69,7 @@ function ClearCache() {
         CacheTickets.pop();
     }
 }
-setInterval(ClearCache(), 10000);
+setInterval(ClearCache, 10000);
 
 function SendNotifications(ticket) {
     playSound();
