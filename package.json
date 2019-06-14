@@ -7,7 +7,7 @@
     "start": "node main.js"
   },
   "author": "Carter Wilde",
-  "license": "ISC",
+  "license": "GNUv3",
   "dependencies": {
     "commander": "^2.20.0",
     "node-fetch": "^2.6.0",
