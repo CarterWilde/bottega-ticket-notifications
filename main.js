@@ -8,10 +8,12 @@ Commander
     .option('-p, --path <path>', 'Sets the path of what audio clip will be used', './defaultBeep.ogg')
     .option('-c, --cache <cacheTime>', 'Set the interval(miliseconds) of the cache clear', 600000)
     .option('-P, --player <playerExe>', 'Sets the player that will play the sound', 'play')
+    .option('-C, --comments', 'Enables comment changes to notify user', false)
     .parse(process.argv);
 let AudioPlayerCmd = Commander.player;
 let SoundPath = Commander.path;
 let CacheClearTimer = Commander.cache;
+let CommentsNotify = Commander.comments;
 fs.writeFileSync('./tickets.cache.json', '[]');
 let CacheTickets = JSON.parse(fs.readFileSync('./tickets.cache.json'));
 ClearCache();
@@ -30,7 +32,7 @@ setInterval(() => {
                 const CacheTicket = CacheTickets[i]
                 //Cleaning up the object
                 delete ticket.assigned_users;
-                delete ticket.comments;
+                if (!CommentsNotify) { delete ticket.comments; }
                 delete ticket.ticket_assignment;
                 if (CacheTicket == undefined) {
                     CacheTickets.push(ticket);
@@ -40,7 +42,7 @@ setInterval(() => {
                     SendNotifications(ticket);
                     return;
                 }
-                ticket.id !== CacheTicket.id && ticket.user_id !== CacheTicket.user_id && ticket.title !== CacheTicket.title
+                ticket.id !== CacheTicket.id && ticket.user_id !== CacheTicket.user_id && ticket.title !== CacheTicket.title && ticket.comments !== CacheTicket.comments
                     ? SendNotifications(ticket) : CacheTickets.push()
             }
         })
