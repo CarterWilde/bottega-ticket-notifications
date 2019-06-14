@@ -12,6 +12,7 @@ Commander
 let AudioPlayerCmd = Commander.player;
 let SoundPath = Commander.path;
 let CacheClearTimer = Commander.cache;
+fs.writeFileSync('./tickets.cache.json', '[]');
 let CacheTickets = JSON.parse(fs.readFileSync('./tickets.cache.json'));
 ClearCache();
 setInterval(() => {
