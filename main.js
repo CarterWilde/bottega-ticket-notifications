@@ -1,3 +1,4 @@
+const fs = require('fs');
 const fetch = require('node-fetch');
 const Notifier = require('node-notifier');
 const Commander = require('commander');
@@ -11,8 +12,8 @@ Commander
 let AudioPlayerCmd = Commander.player;
 let SoundPath = Commander.path;
 let CacheClearTimer = Commander.cache;
-
-let CacheTickets = new Array();
+ClearCache();
+let CacheTickets = JSON.parse(fs.readFileSync('./tickets.cache.json'));
 setInterval(() => {
     fetch("https://ticketapi.bottega.tech/tickets?role=admin")
         .then(response => {
@@ -32,6 +33,9 @@ setInterval(() => {
                 delete ticket.ticket_assignment;
                 if (CacheTicket == undefined) {
                     CacheTickets.push(ticket);
+                    fs.writeFile('tickets.cache.json', JSON.stringify(CacheTickets), (err) => {
+                        if (err) throw err;
+                    });
                     SendNotifications(ticket);
                     return;
                 }
@@ -44,6 +48,9 @@ setInterval(() => {
 function ClearCache() {
     while (CacheTickets.length > 0) {
         CacheTickets.pop();
+        fs.writeFile('tickets.cache.json', JSON.stringify(CacheTickets), (err) => {
+            if (err) throw err;
+        });
     }
 }
 setInterval(ClearCache, parseInt(CacheClearTimer));
