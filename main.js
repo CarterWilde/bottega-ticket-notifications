@@ -12,8 +12,8 @@ Commander
 let AudioPlayerCmd = Commander.player;
 let SoundPath = Commander.path;
 let CacheClearTimer = Commander.cache;
-ClearCache();
 let CacheTickets = JSON.parse(fs.readFileSync('./tickets.cache.json'));
+ClearCache();
 setInterval(() => {
     fetch("https://ticketapi.bottega.tech/tickets?role=admin")
         .then(response => {
