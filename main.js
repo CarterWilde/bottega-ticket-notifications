@@ -18,7 +18,7 @@ fs.writeFileSync('./tickets.cache.json', '[]');
 let CacheTickets = JSON.parse(fs.readFileSync('./tickets.cache.json'));
 ClearCache();
 setInterval(() => {
-    fetch("https://ticketapi.bottega.tech/tickets?role=admin")
+    fetch("https://supportapi.devcamp.com/tickets")
         .then(response => {
             return response.json();
         })
